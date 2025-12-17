@@ -71,9 +71,9 @@ Not all of those requirements need to be fulfilled to get started.
   - Using GitHub Actions for initial OS support
   - Other Build Runners can be added using separate Infrastructure, for example if we ever wanted to provide BSD Builds
 * Reproducible Build Infra
-  - Linux Build SDK using [Yocto](https://www.yoctoproject.org/)
-  - Mac Build SDK using [Nix](https://nixos.org/)
-  - Windows: TBD
+  - [Linux Build SDK](linux-build-sdk.md) using [Yocto Project](https://www.yoctoproject.org/) and QEMU
+  - [Mac Build SDK](mac-build-sdk.md) using [Nix](https://nixos.org/)
+  - [Windows Build SDK](windows-build-sdk.md): TBD
 * Dependency Track to store all Build SBoM / Track Vulnerabilities
 * Support for building intermediate artifacts. For example not all OTP Apps need a recompile for a different infrastructure
 * Observer CLI for Build SBoM? - https://docs.sbom.observer/getting-started/observer-cli
