@@ -15,6 +15,11 @@ Erlang/OTP binary distribution infrastructure.
 
 ## Current Providers
 
+The following tables list some Erlang/OTP providers based on provider types. They are listed here in order
+to get a good overview about how Erlang/OTP are being packaged by different OSS vendors.
+
+### Erlang Binary providers
+
 | Provider | Linux x64 | Linux ARM64 | macOS x64 | macOS ARM64 | Windows x64 | Binary | Docker | Notes |
 |----------|-----------|-------------|-----------|-------------|-------------|--------|--------|-------|
 | [Erlang OTP](https://github.com/erlang/otp) | | | | | ✓ | ✓ | | Official builds |
@@ -26,6 +31,39 @@ Erlang/OTP binary distribution infrastructure.
 | [BEAM runtime](https://meta-erlang.github.io/beamruntime/intro/) | ✓ | ✓ | | | | ✓ | ✓ | runtime relocated based on libc or musl |
 | [Alpine Linux](https://pkgs.alpinelinux.org/package/v3.21/community/x86/erlang) | ✓ | ✓ | | | | ✓ | | musl-based, also armhf/armv7/ppc64le/s390x |
 | [Docker Erlang OTP](https://github.com/erlang/docker-erlang-otp) | ✓ | ✓ | | | | | ✓ | Official Docker library image |
+
+### Erlang Source build tools
+
+| Provider | Notes |
+|----------|-------|
+| [kerl](https://github.com/kerl/kerl) | Easy building and installing of Erlang/OTP instances |
+| [asdf erlang plugin](https://github.com/asdf-vm/asdf-erlang) | Erlang plugin for asdf version manager | 
+
+### Package management
+
+| Provider | Notes |
+|----------|-------|
+| [nix](https://github.com/NixOS/nixpkgs/tree/nixos-25.11/pkgs/development/interpreters/erlang) | nix package | 
+| [erlang chocolatey](https://community.chocolatey.org/packages/erlang) | Erlang package for Windows using https://chocolatey.org/ |
+| [brew](https://formulae.brew.sh/formula/erlang) | package for Linux and MacOs|
+
+### Erlang source build for embedded and custom Linux distributions
+
+| Provider | Notes |
+|----------|-------|
+| [erlang package](https://github.com/buildroot/buildroot/tree/master/package/erlang) | Erlang for buildroot |
+| [erlang recipe](https://github.com/meta-erlang/meta-erlang/tree/master/recipes-devtools/erlang) | Erlang recipe for Yocto Project |
+
+### Erlang source/binary package for Operation Systems
+
+| Provider/Operation System| Notes |
+|----------|-------|
+| [debian](https://tracker.debian.org/pkg/erlang) | |
+| [suse](https://packagehub.suse.com/packages/erlang) | |
+| [fedora](https://packages.fedoraproject.org/pkgs/erlang/erlang/) | | 
+| [freebsd](https://cgit.freebsd.org/ports/tree/lang/erlang) | Also per version [erlang-runtime28](https://cgit.freebsd.org/ports/tree/lang/erlang-runtime28)
+| [openbsd](https://github.com/openbsd/ports/tree/master/lang/erlang) | Also per version, 26, 27 and 28 |
+| [netbsd](https://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc/lang/erlang/index.html) | single version [support for 27](https://github.com/NetBSD/pkgsrc/tree/trunk/lang/erlang/)|
 
 ## Requirements
 
