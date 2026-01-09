@@ -70,10 +70,18 @@ to get a good overview about how Erlang/OTP are being packaged by different OSS 
 Not all of those requirements need to be fulfilled to get started.
 
 ### Platform Support
-* Needs to be able to build at least Windows, Linux, macOS
-  - Needs to be able to partially support other OSes, partial support for SBoM /
-    Build Attestations are acceptable
+* Needs to be able to build at least (not limited to the following list):
+  * Linux
+    * x86-64
+    * aarch64
+    * armv7, aarch32
+  * macOS
+    * aarch64
+  * Windows
+    * x86-64
+* Each supported OS needs to support SBoM. Build Attestations are acceptable
 * Needs to be able to build common architectures on the OS
+* Ability to easily add new architecture for each OS
 
 ### Build Artifacts
 * Creates Build SBoMs for Builds
