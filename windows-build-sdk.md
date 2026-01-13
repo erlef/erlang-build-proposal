@@ -318,7 +318,10 @@ unpacked binaries:
 
  - **ARM64 Windows**: Windows on ARM support could be added when GitHub provides ARM64 Windows
    runners (blocked on [actions/partner-runner-images#109](https://github.com/actions/partner-runner-images/issues/109))
-   and OTP supports ARM64 Windows builds
+   and OTP supports ARM64 Windows builds. Cross-compilation from x64 to ARM64 might be possible
+   using MSVC's ARM64 cross-compiler toolchain (installed via Visual Studio), though this has not
+   been tested with OTP's build system. If cross-compilation proves viable, ARM64 Windows builds
+   could potentially be produced from x64 runners before native ARM64 runners become available.
  - **Additional build flavors**: Different OpenSSL versions, static linking options as needed
  - **MSYS2 alternative**: While WSL+MSVC is the official approach, MSYS2 could be explored as
    an alternative if WSL proves problematic in CI
