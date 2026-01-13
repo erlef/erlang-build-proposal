@@ -1,7 +1,7 @@
 # Erlang Builds
 
 > **Status: Proposal/RFC** - This document outlines a proposal by the
-[Erlang Ecosystem Foundation (Erlef)](https://erlef.org/) to create a unified
+[Erlang Ecosystem Foundation (EEF)](https://erlef.org/) to create a unified
 Erlang/OTP binary distribution infrastructure.
 
 ## Goals
@@ -109,6 +109,50 @@ Not all of those requirements need to be fulfilled to get started.
 
 ## Design Proposal
 
+```mermaid
+flowchart TB
+    subgraph GitHub["GitHub"]
+        Repo["Repository<br/>(Config, Workflows)"]
+        Actions["GitHub Actions"]
+        GHCR["GitHub Container Registry<br/>(GHCR)"]
+    end
+
+    subgraph Orchestrator["Orchestrator Application"]
+        BuildOrch["Build Orchestrator"]
+        API["Public API"]
+    end
+
+    subgraph BuildInfra["Build Infrastructure"]
+        Linux["Linux Build SDK<br/>(Yocto + QEMU)"]
+        macOS["macOS Build SDK<br/>(Nix)"]
+        Windows["Windows Build SDK<br/>(WSL + MSVC)"]
+    end
+
+    subgraph Artifacts["Build Artifacts"]
+        Binaries["Erlang/OTP Binaries"]
+        Docker["Docker Images"]
+        SBOM["SBOMs<br/>(CycloneDX/SPDX)"]
+        SLSA["SLSA Provenance"]
+    end
+
+    DT["Dependency Track<br/>(SBOM Management)"]
+    Users["Users / Downstream Tools"]
+
+    Repo --> Actions
+    Actions --> Linux & macOS & Windows
+    Linux & macOS & Windows --> Binaries & Docker
+    Binaries --> GHCR
+    Docker --> GHCR
+    SBOM --> GHCR
+    SLSA --> GHCR
+    SBOM --> DT
+    BuildOrch --> Actions
+    BuildOrch <--> GHCR
+    API <--> GHCR
+    API --> Users
+    Users --> GHCR
+```
+
 * Using ORAS (OCI Registry As Storage) for Binary Storage / Exchange - https://oras.land/
 * Using OCI for Docker Builds
 * Using GitHub for
@@ -128,6 +172,40 @@ Not all of those requirements need to be fulfilled to get started.
 
 ### API
 
+```mermaid
+flowchart LR
+    subgraph Orchestrator["Orchestrator Application"]
+        subgraph BuildOrch["Build Orchestrator"]
+            ConfigCheck["Check Build Config<br/>vs Built Artifacts"]
+            LibCheck["Check Library Versions<br/>(Security Updates)"]
+            Scheduler["Job Scheduler"]
+        end
+
+        subgraph PublicAPI["Public API"]
+            Status["Build Status<br/>(Done/Planned/Errors)"]
+            Discovery["Discovery API"]
+            Metadata["Build Metadata<br/>(Vulnerabilities)"]
+        end
+    end
+
+    Config["Build Configuration"] --> ConfigCheck
+    OTPVersions["OTP Versions"] --> ConfigCheck
+    ConfigCheck --> Scheduler
+    LibCheck --> Scheduler
+    Scheduler --> |"Trigger Builds"| GHA["GitHub Actions"]
+
+    GHCR["GitHub Container<br/>Registry"]
+    GHA --> GHCR
+    GHCR <--> Status
+    GHCR <--> Discovery
+    GHCR <--> Metadata
+
+    Users["Users / Tools"]
+    Users --> |"Query builds"| Discovery
+    Discovery --> |"Redirect to artifact"| GHCR
+    Users --> |"Direct pull"| GHCR
+```
+
 The project will run an orchestrator application. Its job is twofold:
 * Build Orchestrator
   - Check Build Configuration & OTP Versions against built artifacts
@@ -142,6 +220,53 @@ The project will run an orchestrator application. Its job is twofold:
     * Provide metadata for build like vulnerable status
 
 ### ORAS Structure
+
+```mermaid
+flowchart TB
+    subgraph Registry["ghcr.io/erlef/erlang-builds"]
+        subgraph BinaryRepo["erlang-musl:27.0"]
+            ImageIndex1["Image Index<br/>(multi-arch manifest)"]
+            subgraph Platforms1["Platform Manifests"]
+                AMD64_1["linux/amd64"]
+                ARM64_1["linux/arm64"]
+            end
+            subgraph Layers1["Layers (per OTP app)"]
+                ERTS["erts"]
+                Kernel["kernel"]
+                StdLib["stdlib"]
+                SSL["ssl"]
+                More["..."]
+            end
+            ImageIndex1 --> AMD64_1 & ARM64_1
+            AMD64_1 & ARM64_1 --> Layers1
+        end
+
+        subgraph DockerRepo["erlang-musl-alpine:27.0"]
+            ImageIndex2["Image Index<br/>(multi-arch manifest)"]
+            subgraph Platforms2["Platform Manifests"]
+                AMD64_2["linux/amd64"]
+                ARM64_2["linux/arm64"]
+            end
+            subgraph DockerImg["Docker Image"]
+                AllApps["All OTP apps included"]
+            end
+            ImageIndex2 --> AMD64_2 & ARM64_2
+            AMD64_2 & ARM64_2 --> DockerImg
+        end
+
+        subgraph Attached["Attached Artifacts<br/>(via referrers API)"]
+            SBOM_Art["SBOM<br/>(CycloneDX)"]
+            SLSA_Art["SLSA Provenance"]
+        end
+
+        BinaryRepo -.-> Attached
+        DockerRepo -.-> Attached
+    end
+
+    Client["Client"] --> |"1 Pull tag 27.0"| ImageIndex1
+    Client --> |"2 Select platform"| AMD64_1
+    Client --> |"3 GET /referrers/digest"| Attached
+```
 
 Artifacts are stored in GitHub Container Registry using the
 [OCI Distribution Spec](https://github.com/opencontainers/distribution-spec)
