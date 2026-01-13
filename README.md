@@ -31,6 +31,8 @@ to get a good overview about how Erlang/OTP are being packaged by different OSS 
 | [BEAM runtime](https://meta-erlang.github.io/beamruntime/intro/) | ✓ | ✓ | | | | ✓ | ✓ | runtime relocated based on libc or musl |
 | [Alpine Linux](https://pkgs.alpinelinux.org/package/v3.21/community/x86/erlang) | ✓ | ✓ | | | | ✓ | | musl-based, also armhf/armv7/ppc64le/s390x |
 | [Docker Erlang OTP](https://github.com/erlang/docker-erlang-otp) | ✓ | ✓ | | | | | ✓ | Official Docker library image |
+| [Elixir Desktop Runtimes](https://github.com/elixir-desktop/runtimes) | | | | | | ✓ | | Android & iOS runtimes |
+| [Gleam Erlang Linux Builds](https://github.com/gleam-community/erlang-linux-builds) | ✓ | ✓ | | | | ✓ | | glibc, musl, static variants |
 
 ### Erlang Source build tools
 
