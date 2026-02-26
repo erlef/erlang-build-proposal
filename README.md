@@ -67,6 +67,7 @@ to get a good overview about how Erlang/OTP are being packaged by different OSS 
 | [Docker Erlang OTP](https://github.com/erlang/docker-erlang-otp) | ✓ | ✓ | | | | | ✓ | Official Docker library image |
 | [Elixir Desktop Runtimes](https://github.com/elixir-desktop/runtimes) | | | | | | ✓ | | Android & iOS runtimes |
 | [Gleam Erlang Linux Builds](https://github.com/gleam-community/erlang-linux-builds) | ✓ | ✓ | | | | ✓ | | glibc, musl, static variants |
+| [erlang-dist](https://github.com/benoitc/erlang-dist) | ✓ | ✓ | | ✓ | | ✓ | | Ubuntu, Debian, Rocky Linux, CentOS Stream, macOS |
 
 ### Erlang Source build tools
 
